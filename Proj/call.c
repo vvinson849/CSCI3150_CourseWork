@@ -35,7 +35,10 @@ int open_t(char *pathname)
 	inode* ip = read_inode(hard_disk, 0); // read the root dir
 	DIR_NODE* p_block = (DIR_NODE*)malloc(BLK_SIZE);
 
-	for(char* dir = strtok(pathname, "/"); 
+	char* path_cpy = (char*)malloc(sizeof(*pathname)); 
+	strcpy(path_cpy, pathname);
+
+	for(char* dir = strtok(path_cpy, "/"); 
 			  dir != NULL; 
 			  dir = strtok(NULL, "/")) 
 	{
@@ -51,6 +54,7 @@ int open_t(char *pathname)
 	inode_number = ip->i_number;
 
 	close(hard_disk);
+	free(path_cpy);
 	free(p_block);
 	free(ip);
 
